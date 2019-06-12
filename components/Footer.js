@@ -1,17 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Header() {
+export default function Footer() {
   return (
-    <View style={styles.header}>
-      <Text style={styles.font}>00000</Text>
-      <Text style={styles.font}>+++++</Text>
+    <View style={styles.footer}>
+      <Text style={styles.font}>Wave 0</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
+  footer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
