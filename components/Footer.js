@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Footer() {
+const Footer = () => {
   return (
     <View style={styles.footer}>
       <Text style={styles.font}>Wave 0</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   footer: {
@@ -24,3 +24,5 @@ const styles = StyleSheet.create({
     color: "white"
   }
 });
+
+export default Footer;

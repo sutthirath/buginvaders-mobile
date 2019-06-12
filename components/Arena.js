@@ -13,7 +13,7 @@ export default class Arena extends React.Component {
 
 const styles = StyleSheet.create({
   arena: {
-    height: `${100}%`,
+    height: `${80}%`,
     width: `${100}%`,
     backgroundColor: "rgb(120,72,0)"
   }

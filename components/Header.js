@@ -1,14 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Header() {
+const Header = () => {
   return (
     <View style={styles.header}>
       <Text style={styles.font}>00000</Text>
       <Text style={styles.font}>+++++</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {
@@ -25,3 +25,5 @@ const styles = StyleSheet.create({
     color: "white"
   }
 });
+
+export default Header;
