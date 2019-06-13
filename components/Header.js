@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const Header = () => {
+import Health from "./Health";
+
+const Header = props => {
   return (
     <View style={styles.header}>
       <Text style={styles.font}>00000</Text>
-      <Text style={styles.font}>+++++</Text>
+      <Health life={props.blood} />
     </View>
   );
 };

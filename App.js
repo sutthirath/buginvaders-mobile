@@ -7,6 +7,12 @@ import Header from "./components/Header.js";
 import Footer from "./components/Footer.js";
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      blood: 8
+    };
+  }
   componentDidMount() {
     ScreenOrientation.lockAsync(ScreenOrientation.Orientation.LANDSCAPE);
   }
@@ -15,7 +21,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header />
+        <Header blood={this.state.blood} />
         <Arena />
         <Footer />
       </View>
