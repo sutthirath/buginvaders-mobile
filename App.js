@@ -10,7 +10,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      blood: 8
+      blood: 8,
+      wave: 1,
+      points: 0
     };
   }
   componentDidMount() {
@@ -18,12 +20,13 @@ export default class App extends React.Component {
   }
 
   render() {
+    const parent = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header blood={this.state.blood} />
-        <Arena />
-        <Footer />
+        <Header state={parent} />
+        <Arena wave={parent.wave} />
+        <Footer state={parent} />
       </View>
     );
   }

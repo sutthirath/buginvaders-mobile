@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const Footer = () => {
+const Footer = props => {
   return (
     <View style={styles.footer}>
-      <Text style={styles.font}>Wave 0</Text>
+      <Text style={styles.font}>Wave {props.state.wave}</Text>
     </View>
   );
 };

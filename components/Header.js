@@ -6,8 +6,8 @@ import Health from "./Health";
 const Header = props => {
   return (
     <View style={styles.header}>
-      <Text style={styles.font}>00000</Text>
-      <Health life={props.blood} />
+      <Text style={styles.font}>{props.state.points}</Text>
+      <Health life={props.state.blood} />
     </View>
   );
 };
