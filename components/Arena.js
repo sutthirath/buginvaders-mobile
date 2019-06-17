@@ -1,5 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Animated,
+  Easing,
+  Dimensions,
+  TouchableWithoutFeedback
+} from "react-native";
 
 import soldier from "../assets/soldier.png";
 
@@ -7,20 +16,25 @@ export default class Arena extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      soldiers: []
+      soldiers: [],
+      xValue: new Animated.Value(0)
     };
   }
+  sWidth = Dimensions.get("window").width;
+  sHeight = Dimensions.get("window").height;
 
   bugCreation() {
-    const num = Math.floor(this.props.wave * 10);
+    const num = Math.floor(this.props.wave * 20);
     let arr = [];
     for (let i = 0; i < num; i++) {
       arr.push(
-        <Image
-          source={soldier}
-          key={i}
-          style={[styles.bug, this.bugPosition()]}
-        />
+        <TouchableWithoutFeedback key={i} onPress={() => this._bugRemove(i)}>
+          <Image
+            key={i}
+            source={soldier}
+            style={[styles.bug, this.bugPosition(i)]}
+          />
+        </TouchableWithoutFeedback>
       );
     }
     return this.setState({
@@ -28,21 +42,41 @@ export default class Arena extends React.Component {
     });
   }
 
-  bugPosition() {
+  bugPosition(i) {
     return {
-      left: Math.trunc(Math.random() * -700),
-      top: Math.trunc(Math.random() * 300)
+      left: Math.trunc(i * -60),
+      top: Math.trunc(Math.random() * 295)
     };
   }
+
+  bugMovement() {
+    Animated.timing(this.state.xValue, {
+      toValue: this.sWidth * 3,
+      duration: 12000,
+      easing: Easing.linear
+    }).start();
+  }
+
+  /*--- Test Start ---*/
+  _bugRemove = i => {
+    return;
+  };
+  /*--- Test End ---*/
 
   componentDidMount() {
     this.bugCreation();
   }
 
+  componentDidUpdate() {
+    this.bugMovement();
+  }
+
   render() {
     return (
       <View style={styles.arena}>
-        <View>{this.state.soldiers}</View>
+        <Animated.View style={{ left: this.state.xValue }}>
+          {this.state.soldiers}
+        </Animated.View>
       </View>
     );
   }
