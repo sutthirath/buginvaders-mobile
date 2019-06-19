@@ -17,17 +17,27 @@ export default class Arena extends React.Component {
     super(props);
     this.state = {
       soldiers: [],
+      number: 0,
+      alive: new Set(),
       xValue: new Animated.Value(0)
     };
   }
   sWidth = Dimensions.get("window").width;
   sHeight = Dimensions.get("window").height;
 
-  bugCreation() {
-    const num = Math.floor(this.props.wave * 20);
-    let arr = [];
+  async bugNumber() {
+    return this.setState({
+      number: Math.floor(this.props.wave * 5)
+    });
+  }
+
+  async bugCreation() {
+    await this.bugNumber();
+    const num = this.state.number;
+    let arr = [],
+      living = new Set();
     for (let i = 0; i < num; i++) {
-      arr.push(
+      arr[i] = (
         <TouchableWithoutFeedback key={i} onPress={() => this._bugRemove(i)}>
           <Image
             key={i}
@@ -36,9 +46,11 @@ export default class Arena extends React.Component {
           />
         </TouchableWithoutFeedback>
       );
+      living.add(Number(arr[i].key));
     }
     return this.setState({
-      soldiers: arr
+      soldiers: arr,
+      alive: living
     });
   }
 
@@ -52,16 +64,34 @@ export default class Arena extends React.Component {
   bugMovement() {
     Animated.timing(this.state.xValue, {
       toValue: this.sWidth * 3,
-      duration: 12000,
+      duration: 15000,
       easing: Easing.linear
     }).start();
   }
 
   /*--- Test Start ---*/
   _bugRemove = i => {
-    return;
+    const prevState = [...this.state.soldiers];
+    let bugs = new Map(),
+      cache = new Set(this.state.alive);
+    cache.delete(i);
+    for (let j = 0; j < this.state.number; j++) {
+      if (cache.has(j)) {
+        bugs.set(j, prevState[j]);
+      }
+    }
+    bugs.delete(i);
+    console.log(bugs.size);
+    return this.setState({
+      soldiers: [...bugs.values()],
+      alive: cache
+    });
   };
   /*--- Test End ---*/
+
+  waveWin() {
+    if (this.state.soldiers.length === 0) return <Text>Winner!</Text>;
+  }
 
   componentDidMount() {
     this.bugCreation();
@@ -69,6 +99,7 @@ export default class Arena extends React.Component {
 
   componentDidUpdate() {
     this.bugMovement();
+    this.waveWin();
   }
 
   render() {
