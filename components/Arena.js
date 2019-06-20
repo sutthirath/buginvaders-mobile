@@ -7,7 +7,8 @@ import {
   Animated,
   Easing,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from "react-native";
 
 import soldier from "../assets/soldier.png";
@@ -27,7 +28,7 @@ export default class Arena extends React.Component {
 
   async bugNumber() {
     return this.setState({
-      number: Math.floor(this.props.wave * 5)
+      number: Math.floor(this.props.wave * 20)
     });
   }
 
@@ -38,7 +39,16 @@ export default class Arena extends React.Component {
       living = new Set();
     for (let i = 0; i < num; i++) {
       arr[i] = (
-        <TouchableWithoutFeedback key={i} onPress={() => this._bugRemove(i)}>
+        <TouchableWithoutFeedback
+          key={i}
+          onPress={e => this._bugRemove(e, i)}
+          /*
+          onSomething={event => {
+            const x = event.nativeEvent.layout.pageX;
+            this.callback(x)
+          }}
+          */
+        >
           <Image
             key={i}
             source={soldier}
@@ -62,35 +72,40 @@ export default class Arena extends React.Component {
   }
 
   bugMovement() {
+    const width = this.sWidth;
     Animated.timing(this.state.xValue, {
-      toValue: this.sWidth * 3,
-      duration: 15000,
+      toValue: width * 3,
+      duration: 13000,
       easing: Easing.linear
     }).start();
   }
 
-  /*--- Test Start ---*/
-  _bugRemove = i => {
-    const prevState = [...this.state.soldiers];
-    let bugs = new Map(),
-      cache = new Set(this.state.alive);
-    cache.delete(i);
+  _bugRemove = (e, i) => {
+    const state = [...this.state.soldiers];
+    let bugs = new Map();
+    let cache = [...this.state.alive];
     for (let j = 0; j < this.state.number; j++) {
-      if (cache.has(j)) {
-        bugs.set(j, prevState[j]);
+      if (state[cache[j]]) {
+        bugs.set(Number(state[cache[j]].key), state[cache[j]]);
       }
     }
-    bugs.delete(i);
-    console.log(bugs.size);
+    bugs.delete(Number(bugs.get(i).key));
+    this.props._updatePoints(15);
+    this.waveWin(bugs.size);
     return this.setState({
       soldiers: [...bugs.values()],
-      alive: cache
+      alive: new Set(cache)
     });
   };
-  /*--- Test End ---*/
 
-  waveWin() {
-    if (this.state.soldiers.length === 0) return <Text>Winner!</Text>;
+  bugBite() {
+    this.props._updateBlood(1);
+  }
+
+  waveWin(bugs) {
+    if (bugs === 0) {
+      return Alert.alert("You Win!", "Ready for the next wave?");
+    }
   }
 
   componentDidMount() {
@@ -99,7 +114,6 @@ export default class Arena extends React.Component {
 
   componentDidUpdate() {
     this.bugMovement();
-    this.waveWin();
   }
 
   render() {

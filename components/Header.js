@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
   },
 
   font: {
-    color: "white"
+    color: "white",
+    fontSize: 30
   }
 });
 

@@ -15,6 +15,19 @@ export default class App extends React.Component {
       points: 0
     };
   }
+
+  _updatePoints = point => {
+    return this.setState({
+      points: (this.state.points += point)
+    });
+  };
+
+  _updateBlood = life => {
+    return this.setState({
+      blood: (this.state.blood -= life)
+    });
+  };
+
   componentDidMount() {
     ScreenOrientation.lockAsync(ScreenOrientation.Orientation.LANDSCAPE);
   }
@@ -25,7 +38,11 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         <Header state={parent} />
-        <Arena wave={parent.wave} />
+        <Arena
+          wave={parent.wave}
+          _updatePoints={this._updatePoints}
+          _updateBlood={this._updateBlood}
+        />
         <Footer state={parent} />
       </View>
     );
