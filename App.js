@@ -37,7 +37,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
-        <Header state={parent} />
+        <Header state={parent} _handleBlood={this._handleBlood} />
         <Arena
           wave={parent.wave}
           _updatePoints={this._updatePoints}

@@ -28,7 +28,7 @@ export default class Arena extends React.Component {
 
   async bugNumber() {
     return this.setState({
-      number: Math.floor(this.props.wave * 20)
+      number: Math.floor(this.props.wave * 10)
     });
   }
 
@@ -41,13 +41,13 @@ export default class Arena extends React.Component {
       arr[i] = (
         <TouchableWithoutFeedback
           key={i}
-          onPress={e => this._bugRemove(e, i)}
-          /*
-          onSomething={event => {
-            const x = event.nativeEvent.layout.pageX;
-            this.callback(x)
-          }}
-          */
+          onPress={() => this._bugRemove(i)}
+          // onChange={event => {
+          //   const x = event.nativeEvent.layout.x;
+          //   if (x > 600) {
+          //     this.props._updateBlood(1);
+          //   }
+          // }}
         >
           <Image
             key={i}
@@ -80,7 +80,7 @@ export default class Arena extends React.Component {
     }).start();
   }
 
-  _bugRemove = (e, i) => {
+  _bugRemove = i => {
     const state = [...this.state.soldiers];
     let bugs = new Map();
     let cache = [...this.state.alive];
@@ -91,16 +91,13 @@ export default class Arena extends React.Component {
     }
     bugs.delete(Number(bugs.get(i).key));
     this.props._updatePoints(15);
+    // this.props._updateBlood(1);
     this.waveWin(bugs.size);
-    return this.setState({
-      soldiers: [...bugs.values()],
-      alive: new Set(cache)
+    return this.setState(prevState => {
+      (prevState.soldiers = [...bugs.values()]),
+        (prevState.alive = new Set(cache));
     });
   };
-
-  bugBite() {
-    this.props._updateBlood(1);
-  }
 
   waveWin(bugs) {
     if (bugs === 0) {
